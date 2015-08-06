@@ -22,10 +22,15 @@ int g_error_code;
 unsigned int g_return_value;
 
 int ds1307_set_rtc_data (char register_value, char data) {
+    USART_puts(USART2, "ds1307_set_rtc_data A entered\r\n");
     I2C_start(I2C1, (DS1307_ADDRESS << 1), I2C_Direction_Transmitter);
+    USART_puts(USART2, "ds1307_set_rtc_data B entered\r\n");
     I2C_write(I2C1, register_value);
+    USART_puts(USART2, "ds1307_set_rtc_data B entered\r\n");
     I2C_write(I2C1, data);
+    USART_puts(USART2, "ds1307_set_rtc_data B entered\r\n");
     I2C_stop(I2C1);
+    USART_puts(USART2, "ds1307_set_rtc_data C entered\r\n");
 
     // otherwise success
     return RTC_DS1307_OK;
@@ -190,12 +195,16 @@ int ds1307_init_rtc (int first_run_flag) {
         .seconds = 0
     };
 
+    USART_puts(USART2, "ds1307_init_rtc entered\r\n");
     if (ds1307_set_rtc_data(CONTROL_REGISTER, 0) == -1) {
         return RTC_DS1307_BAD;
     }
 
+    USART_puts(USART2, "ds1307_set_rtc_data passed\r\n");
+
     if (first_run_flag) {
         return ds1307_set_rtc_datetime(&init_datetime);
+        USART_puts(USART2, "ds1307_set_rtc_datetime passed\r\n");
     }
 
     // otherwise return 0 to indicate success

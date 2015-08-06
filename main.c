@@ -7,7 +7,7 @@
 #include "rtc_ds1307.h"
 
 #define MAX_STR_LEN 128
-#define DEFAULT_WAIT_TIME 10000000u
+#define DEFAULT_WAIT_TIME 5000000u
 
 void Delay(__IO uint32_t nCount) {
   while(nCount--) {
@@ -36,10 +36,14 @@ int main(void) {
     rtc_ds1307_datetime_t rtc_datetime;
 
     init_USART1(115200); // initialize the USART peripheral
+    USART_puts(USART2, "Passed init_USART1 call\r\n");
     init_I2C1();         // initialize I2C peripheral
+    USART_puts(USART2, "Passed init_I2C1 call\r\n");
     ds1307_init_rtc(1);  // init the ds1307 RTC for first time
+    USART_puts(USART2, "Passed ds1307_init_rtc call\r\n");
 
     while(1) {
+        USART_puts(USART2, "Main loop entered.\r\n");
         if (ds1307_get_rtc_datetime(&rtc_datetime) != RTC_DS1307_OK) {
             USART_puts(USART2, "!!!! could not get ds1307 RTC datetime struc\n");
         }
@@ -47,6 +51,8 @@ int main(void) {
         display_rtc(&rtc_datetime);
 
         count++;
+        USART_puts(USART2, "Main loop exit.\r\n");
+
         Delay(DEFAULT_WAIT_TIME);
     }
 }
