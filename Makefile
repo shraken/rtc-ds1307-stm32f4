@@ -20,7 +20,8 @@ MCU = cortex-m4
 MCFLAGS = -mcpu=$(MCU) -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork -std=c99
 STM32_INCLUDES = -I$(LIBPATH)/Libraries/CMSIS/Device/ST/STM32F4xx/Include/ \
 	-I$(LIBPATH)/Libraries/CMSIS/Include/ \
-	-I$(LIBPATH)/Libraries/STM32F4xx_StdPeriph_Driver/inc/
+	-I$(LIBPATH)/Libraries/STM32F4xx_StdPeriph_Driver/inc/ \
+	-I./inc/
 
 OPTIMIZE       = -Os
 
@@ -28,12 +29,12 @@ CFLAGS	= $(MCFLAGS)  $(OPTIMIZE)  $(DEFS) -I. -I./ $(STM32_INCLUDES)  -Wl,-T,stm
 AFLAGS	= $(MCFLAGS) 
 #-mapcs-float use float regs. small increase in code size
 
-SRC = main.c \
-	./rtc_usart.c \
-	./rtc_i2c.c \
-	./rtc_ds1307.c \
-	stm32f4xx_it.c \
-	system_stm32f4xx.c \
+SRC = ./src/main.c \
+	./src/rtc_usart.c \
+	./src/rtc_i2c.c \
+	./src/rtc_ds1307.c \
+	./src/stm32f4xx_it.c \
+	./src/system_stm32f4xx.c \
 	$(LIBPATH)/Libraries/STM32F4xx_StdPeriph_Driver/src/misc.c \
 	$(LIBPATH)/Libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_adc.c \
 	$(LIBPATH)/Libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_can.c \
@@ -84,4 +85,4 @@ burn:
 
 clean:
 	rm -f Startup.lst  $(TARGET)  $(TARGET).lst $(OBJ) $(AUTOGEN)  $(TARGET).out  $(TARGET).hex  $(TARGET).map \
-	 $(TARGET).dmp  $(TARGET).elf
+	 $(TARGET).dmp  $(TARGET).elf  $(TARGET).bin
